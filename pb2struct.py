@@ -12,9 +12,7 @@ class PBLexer:
 
 
     keywords = (
-        # structure keywords
-        'ENUM',
-        'MESSAGE',
+        # Module level keywords
         'SYNTAX',
         )
     datatypes = (
@@ -80,7 +78,8 @@ class PBLexer:
         'IDENTIFIER',
         'STRING',
         'COMMENT',
-        'KEYWORD'
+        'ENUM'
+        'MESSAGE'
         )
 
     t_EQ = r'='
@@ -154,6 +153,39 @@ class PBParse:
     def parse(self, data):
         res = self._parser.parse(data, lexer = self._lex)
         return res
+
+    def p_module(self, p):
+        '''module  : module enum
+                   | module message
+                   | empty '''
+        print("module " , p)
+        print("enum" , p)
+
+    def p_message(self, p):
+        ''' message : MESSAGE IDENTIFER  LSWBR definition_list RSWBR'''
+        print("message" , p)
+
+    def p_enum(self, p):
+        ''' enum : ENUM IDENTIFER LSWBR assignment_list RSWBR'''
+        print("enum" , p)
+
+    def p_definition_list_1(self, p):
+        ''' definition_list : definition
+                            | definition_list definition '''
+        print("definition list" , p)
+
+    def p_definition(self, p):
+        ''' definition : DTYPE IDENTIFIER EQ NUMBER SEMICOLON '''
+
+    def p_assignment_list(self, p):
+        ''' assignment_list : assignment
+                            | assignment_list assignment '''
+        print("assignment_list" , p)
+
+    def p_assignment(self, p):
+        ''' assignment : IDENTIFIER EQ NUMBER SEMICOLON '''
+        print("assignment" , p)
+
 
 
     def p_empty(self, t):
